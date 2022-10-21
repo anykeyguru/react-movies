@@ -15,12 +15,14 @@ class Main extends React.Component {
     }
 
     componentDidMount() {
-        fetch(`http://www.omdbapi.com/?s=Back to the Future&apikey=${REACT_APP_API_KEY}`)
+        fetch(`https://www.omdbapi.com/?s=Back to the Future&apikey=${REACT_APP_API_KEY}`)
             .then(response => response.json())
             .then(data => {
-
                 this.setState({movies: data.Search, loading: false})
-            })
+            }).catch((err)=>{
+                console.error(err)
+            this.setState({loading: false})
+        })
     }
 
     searchHandler = (fname, tfilm = 'all') =>{
@@ -35,9 +37,13 @@ class Main extends React.Component {
         }
 
         if (fname !==""){
-            fetch(`http://www.omdbapi.com/?apikey=${REACT_APP_API_KEY}&s=${fname}&page=${this.state.page}${filter}`)
+            fetch(`https://www.omdbapi.com/?apikey=${REACT_APP_API_KEY}&s=${fname}&page=${this.state.page}${filter}`)
                 .then(response => response.json())
                 .then(data => this.setState({movies: data.Search, total_movies: data.totalResult, loading: false}))
+                .catch((err)=>{
+                    console.error(err)
+                    this.setState({loading: false})
+                })
         } else {
             this.setState({loading: false})
         }
